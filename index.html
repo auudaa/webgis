@@ -26,12 +26,12 @@
             });
             const view = new MapView({ //tampilan peta
                 map: map, //parameter yg dibutuhkan di library map view
-                center: [106.830956, -6.180429], // Longitude, latitude koordinat di tengah2
+                center: [101.4463984, 0.7844556], // Longitude, latitude koordinat di tengah2
                 zoom: 15, // Zoom level 
                 container: "viewDiv" // nyari Div element html
             });
             const jsonlayer = new GeoJSONLayer({
-                url: "src/sawit.geojson" 
+                url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/sawit.geojson" 
             });
             map.add(jsonlayer);
         });
