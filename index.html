@@ -20,7 +20,7 @@
         }
     </style>
     <script>
-        require(["esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLayer"], function (Map, MapView, GeoJSONLayer) { //library 
+        require(["esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLayer", "esri/widgets/BasemapGallery"], function (Map, MapView, GeoJSONLayer, BasemapGallery) { //library 
             const map = new Map({ //variable
                 basemap: "streets-vector" // Basemap layer service
             });
@@ -30,10 +30,21 @@
                 zoom: 15, // Zoom level 
                 container: "viewDiv" // nyari Div element html
             });
-            const jsonlayer = new GeoJSONLayer({
-                url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/sawit.geojson" 
+            const jsonlayersawit = new GeoJSONLayer({
+                url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/sawit.geojson"
             });
-            map.add(jsonlayer);
+            map.add(jsonlayersawit);
+            let basemapGallery = new BasemapGallery({
+                view: view
+            });
+            // Add widget to the top right corner of the view
+            view.ui.add(basemapGallery, {
+                position: "top-right"
+            });
+            // const jsonlayer = new GeoJSONLayer({
+            //     url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/sawit.geojson" 
+            // });
+            // map.add(jsonlayersawit);
         });
     </script>
 </head>
