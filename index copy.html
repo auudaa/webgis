@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- import api dari arcgis untuk style -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.27/"></script>
+    <!-- style setting dari user -->
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <script>
+        require(["esri/Map", "esri/views/MapView", "esri/layers/GeoJSONLayer", "esri/widgets/BasemapGallery"], function (Map, MapView, GeoJSONLayer, BasemapGallery) { //library 
+            const map = new Map({ //variable
+                basemap: "streets-vector" // Basemap layer service
+            });
+            const view = new MapView({ //tampilan peta
+                map: map, //parameter yg dibutuhkan di library map view
+                center: [101.4463984, 0.7844556], // Longitude, latitude koordinat di tengah2
+                zoom: 13, // Zoom level 
+                container: "viewDiv" // nyari Div element html
+            });
+            const jsonlayersawit = new GeoJSONLayer({
+                url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/sawit.geojson"
+            });
+            map.add(jsonlayersawit);
+            let basemapGallery = new BasemapGallery({
+                view: view
+            });
+            // Add widget to the top right corner of the view
+            view.ui.add(basemapGallery, {
+                position: "top-right"
+            });
+            const jsonlayerlistrik = new GeoJSONLayer({
+                 url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/jalur_listrik.geojson" 
+             });
+            map.add(jsonlayerlistrik);
+        });
+        const jsonlayerpipa = new GeoJSONLayer({
+            url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/jalur_pipa.geojson"
+        });
+        map.add(jsonlayerpipa);
+    
+    </script>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+
+</body>
+
+</html>
