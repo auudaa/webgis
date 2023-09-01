@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test ArcGIS API</title>
+  <!-- import api dari arcgis untuk style -->
+  <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.27/"></script>
+  <!-- style setting dari user -->
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background-color: black;
+    }
+
+    #titleDiv {
+      padding: 10px;
+    }
+
+    #titleText {
+      font-size: 20pt;
+      font-weight: 60;
+      padding-bottom: 10px;
+    }
+
+    #img {
+      width: 150px;
+      height: 100px;
+      border: 1px solid #000;
+      margin: 10px 0;
+    }
+
+    .contain {
+      object-fit: contain;
+    }
+  </style>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/GeoJSONLayer",
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/Zoom",
+      "esri/widgets/Compass",
+      "esri/widgets/Search",
+      "esri/widgets/Legend",
+      "esri/widgets/Expand",
+      "esri/widgets/ScaleBar",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Swipe",
+      "esri/Color",
+      "esri/renderers/UniqueValueRenderer",
+      "esri/widgets/Locate",
+    ], function (
+      Map,
+      MapView,
+      GeoJSONLayer,
+      BasemapGallery,
+      Zoom,
+      Compass,
+      Search,
+      Legend,
+      Expand,
+      ScaleBar,
+      FeatureLayer,
+      Color,
+      UniqueValueRenderer,
+      Locate
+    ) {
+      //MAP CONFIG
+
+
+      const map = new Map({
+        //variable
+        basemap: "dark-gray-vector", // Basemap layer service
+      });
+      const view = new MapView({
+        //tampilan peta
+        map: map, //parameter yg dibutuhkan di library map view
+        center: [101.4463984, 0.7844556], // Longitude, latitude koordinat di tengah2
+        zoom: 13, // Zoom level
+        container: "viewDiv", // nyari Div element html
+        // add scale bar
+      });
+      //Add basemap toggle
+
+      const basemapGallery = new BasemapGallery({
+        view: view,
+        container: document.createElement("div")
+      });
+
+      // Create an Expand instance and set the content
+      // property to the DOM node of the basemap gallery widget
+
+      const bgExpand = new Expand({
+        view: view,
+        content: basemapGallery,
+      });
+
+      // Add the expand instance to the ui
+
+      view.ui.add(bgExpand, "bottom-right");
+
+      //LAYER CONFIG
+      // const featurelayersawit = new FeatureLayer({
+      //   url: "https://services-ap1.arcgis.com/k7mXQiKVwCwqyBIp/ArcGIS/rest/services/Astrid_Digitasi_WFL1/FeatureServer/4",
+      // });
+      // map.add(featurelayersawit);
+
+      const renderer2 = {
+        type: "simple", // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#5F9EA0",
+          outline: {
+            // makes the outlines of all features consistently light gray
+            color: "lightgray",
+            width: 0.5,
+          },
+        },
+      };
+
+      const jsonlayersawit = new GeoJSONLayer({
+        url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/sawit.geojson",
+        title: "Kebun Sawit",
+        renderer: renderer2,
+      });
+
+      map.add(jsonlayersawit);
+      // let basemapGallery = new BasemapGallery({
+      //     view: view,
+      //});
+
+      const renderer3 = {
+        type: "simple", // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "simple-line", // autocasts as new SimpleFillSymbol()
+          color: "blue",
+          outline: {
+            // makes the outlines of all features consistently light gray
+            color: "lightgray",
+            width: 2,
+          },
+        },
+      };
+      const jsonlayerlistrik = new GeoJSONLayer({
+        url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/jalur_listrik.geojson",
+        title: "Listrik",
+        renderer: renderer3
+      });
+      map.add(jsonlayerlistrik);
+
+      const renderer1 = {
+        type: "simple", // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "simple-line", // autocasts as new SimpleFillSymbol()
+          color: "red",
+          outline: {
+            // makes the outlines of all features consistently light gray
+            color: "lightgray",
+            width: 2,
+          },
+        },
+      };
+
+      const jsonlayerpipa = new GeoJSONLayer({
+        url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/jalur_pipa.geojson",
+        title: "Pipa",
+        renderer: renderer1
+      });
+      map.add(jsonlayerpipa);
+
+      const renderer = {
+        type: "simple", // autocasts as new SimpleRenderer()
+        symbol: {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: "#C9CC3F",
+          outline: {
+            // makes the outlines of all features consistently light gray
+            color: "lightgray",
+            width: 0.5,
+          },
+        },
+      };
+      const jsonlayerwell = new GeoJSONLayer({
+        url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/sumur.geojson",
+        title: "Sumur",
+        renderer: renderer,
+      });
+
+      map.add(jsonlayerwell);
+
+      const jsonlayerwell_location = new GeoJSONLayer({
+        url: "https://raw.githubusercontent.com/auudaa/webgis/main/src/well_location.geojson",
+        title: "Lokasi Sumur",
+        // renderer: renderer3,
+      });
+      map.add(jsonlayerwell_location);
+
+      //WIDGET CONFIG
+      //Judul
+      
+      view.ui.add("titleDiv", "top-right");
+
+      //Search
+      const searchWidget = new Search({
+        view: view,
+      });
+      view.ui.add(searchWidget, {
+        position: "bottom-right",
+      });
+
+      //Kompas
+      const compass = new Compass({
+        view: view,
+      });
+      view.ui.add(compass, {
+        position: "top-left",
+      });
+
+      //add legend
+      const legend = new Expand({
+        content: new Legend({
+          view: view,
+          style: "card", // other styles include 'classic'
+        }),
+        view: view,
+        expanded: false,
+      });
+      view.ui.add(legend, "bottom-left");
+
+      //Skala
+      const scaleBar = new ScaleBar({
+        view: view,
+        unit: "dual", // The scale bar displays both metric and non-metric units.
+      });
+      view.ui.add(scaleBar, {
+        position: "bottom-left",
+      });
+      
+      // const locatebtn = new Locate({
+      //   view: view
+      // });
+      // view.ui.add(locatebtn, "bottom-left");
+
+      // //swipe
+      // let swipe = new Swipe({
+      //   view: view,
+      //   leadingLayers: [jsonlayerwell_location, jsonlayersawit],
+      //   trailingLayers: [sonlayerwell],
+      //   direction: "vertical", // swipe widget will move from top to bottom of view
+      //   position: 50, // position set to middle of the view (50%)
+      // });
+      // view.ui.add(swipe);
+
+      const locateBtn = new Locate({
+          view: view
+        });
+
+        // Add the locate widget to the top left corner of the view
+        view.ui.add(locateBtn, "top-left");
+        
+
+      // let locateWidget = new Locate({ //ini error perlu di tnyakan ari
+      //   view: view,   // Attaches the Locate button to the view
+      //   graphic: new Graphic({
+      //     symbol: { type: "simple-marker" }  // overwrites the default symbol used for the
+      //     // graphic placed at the location of the user when found
+      //   })
+      // });
+      // view.ui.add(locateWidget, "bottom-right");
+    });
+
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <div id="titleDiv" class="esri-widget" style="background-color: #343434">
+    <img
+      src="https://github.com/auudaa/webgis/blob/c007f551e413e427737313b980757a6104bced23/src/logo%20aria%20png.png?raw=true"
+      style="width: 4cm; height: 1cm" />
+    <div id="titleText" style="color: white">Peta Jalur Pipa</div>
+    <div style="color: white">Minas, Riau</div>
+  </div>
+</body>
+
+</html>
